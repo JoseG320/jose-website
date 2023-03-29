@@ -34,8 +34,8 @@ body {
     line-height: 1.5;
     color: #fff;
     background-color: #fff;
-    background-image: linear-gradient(rgba(7, 7, 7, 0.5),
-            rgba(7, 7, 7, 0.5)),
+    background-image: linear-gradient(rgba(7, 7, 7, 0.6),
+            rgba(7, 7, 7, 0.6)),
         url("https://i.kym-cdn.com/entries/icons/original/000/000/633/icon3.gif");
     background-size: 100%;
     background-repeat: repeat;
