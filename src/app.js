@@ -1,0 +1,112 @@
+'use strict';
+
+const path = require('path');
+const express = require('express');
+const session = require('express-session');
+const PgSession = require('connect-pg-simple')(session);
+const expressLayouts = require('express-ejs-layouts');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const flash = require('connect-flash');
+
+const config = require('./config');
+const pool = require('./db/pool');
+const { injectAuthLocals } = require('./middleware/auth');
+const { generateToken } = require('./middleware/csrf');
+const { globalLimiter } = require('./middleware/rateLimit');
+
+// ROUTES
+const publicRoutes = require('./routes/public');
+const authRoutes = require('./routes/auth');
+const adminRoutes = require('./routes/admin');
+
+const app = express();
+
+// Behind a reverse proxy? Trust it so secure cookies + client IPs work.
+if (config.trustProxy) app.set('trust proxy', config.trustProxy);
+
+// VIEWS
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '..', 'views'));
+app.use(expressLayouts);
+app.set('layout', 'layout');
+
+// HELMET SECURITY HEADERS
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", 'data:'],
+        objectSrc: ["'self'"], // important for embedding the resume PDF
+        frameSrc: ["'self'"],
+        upgradeInsecureRequests: config.isProd ? [] : null,
+      },
+    },
+  })
+);
+
+// LOGGING
+app.use(morgan(config.isProd ? 'combined' : 'dev'));
+
+// BODY PARSING
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+// ASSETS
+app.use(express.static(path.join(__dirname, '..', 'public'), { maxAge: config.isProd ? '7d' : 0 }));
+
+// RATE LIMITING
+app.use(globalLimiter);
+
+// SESSIONS
+app.use(
+  session({
+    store: new PgSession({ pool, tableName: 'session', createTableIfMissing: false }),
+    name: 'connect.sid',
+    secret: config.sessionSecret,
+    resave: false,
+    saveUninitialized: false,
+    rolling: true,
+    cookie: {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: config.isProd, // requires HTTPS in prod
+      maxAge: 1000 * 60 * 60 * 8, // 8 hours
+    },
+  })
+);
+
+// FLASH
+app.use(flash());
+app.use(injectAuthLocals);
+app.use(generateToken);
+app.use((req, res, next) => {
+  res.locals.flashSuccess = req.flash('success');
+  res.locals.flashError = req.flash('error');
+  res.locals.currentPath = req.path;
+  next();
+});
+
+// PAGE ROUTES
+app.use('/', publicRoutes);
+app.use('/admin', authRoutes); // /admin/login, /admin/logout
+app.use('/admin', adminRoutes); // /admin dashboard
+
+// ERROR HANDLERS
+app.use((req, res) => {
+  res.status(404).render('pages/error', { title: 'Not Found' });
+});
+
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  console.error('[error]', err);
+  res.status(err.status || 500).render('pages/error', {
+    title: 'Server Error',
+    message: config.isProd ? 'Something went wrong.' : err.message,
+  });
+});
+
+module.exports = app;
