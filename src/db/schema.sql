@@ -1,5 +1,5 @@
 -- admins
--- Admin accounts. Made it so that 
+-- Admin accounts. Made it so that a password must be changed.
 CREATE TABLE IF NOT EXISTS admins (
   id            SERIAL PRIMARY KEY,
   username      TEXT NOT NULL UNIQUE,
