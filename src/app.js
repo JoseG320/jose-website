@@ -56,7 +56,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // ASSETS
-app.use(express.static(path.join(__dirname, '..', 'public'), { maxAge: config.isProd ? '7d' : 0 }));
+// In dev: never cache, so edits show up immediately.
+// In prod: cache hard (1 year) BUT we bust the cache via ?v= below.
+app.use(express.static(path.join(__dirname, '..', 'public'), {
+  etag: true,
+  maxAge: config.isProd ? '1y' : 0,
+  setHeaders: (res) => {
+    if (!config.isProd) res.setHeader('Cache-Control', 'no-store');
+  },
+}));
 
 // RATE LIMITING
 app.use(globalLimiter);
@@ -87,6 +95,13 @@ app.use((req, res, next) => {
   res.locals.flashSuccess = req.flash('success');
   res.locals.flashError = req.flash('error');
   res.locals.currentPath = req.path;
+  next();
+});
+
+// A value that changes whenever the server restarts, used to bust CSS/JS caches.
+const ASSET_VERSION = String(Date.now());
+app.use((req, res, next) => {
+  res.locals.assetVersion = ASSET_VERSION;
   next();
 });
 
