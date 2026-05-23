@@ -11,6 +11,17 @@ function requireAdmin(req, res, next) {
   return res.redirect('/admin/login');
 }
 
+// If the logged-in admin still has a temporary password, force them to the
+// change-password page before anything else. Apply AFTER requireAdmin, and
+// NOT on the change-password routes (or you get a redirect loop).
+function requirePasswordCurrent(req, res, next) {
+  if (req.session && req.session.mustChangePassword) {
+    req.flash('error', 'Please set a new password to continue.');
+    return res.redirect('/admin/change-password');
+  }
+  next();
+}
+
 // Makes auth state available to every view (e.g. to show/hide an "Admin" link).
 function injectAuthLocals(req, res, next) {
   res.locals.isAdmin = Boolean(req.session && req.session.adminId);
@@ -18,4 +29,4 @@ function injectAuthLocals(req, res, next) {
   next();
 }
 
-module.exports = { requireAdmin, injectAuthLocals };
+module.exports = { requireAdmin, requirePasswordCurrent, injectAuthLocals };

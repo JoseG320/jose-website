@@ -1,0 +1,52 @@
+
+.pf-section__intro { max-width: var(--size-content-3); color: var(--foreground-muted);
+  font-size: var(--font-size-3); margin: var(--size-3) auto 0; text-align: center; }
+
+/* About: skills */
+.pf-skills { display: flex; flex-wrap: wrap; gap: var(--size-2); justify-content: center;
+  list-style: none; padding: 0; margin: var(--size-7) 0 0; }
+.pf-skills li { border: var(--border-size-1) solid var(--foreground-primary); border-radius: 100px;
+  padding: var(--size-1) var(--size-4); font-size: var(--font-size-0); letter-spacing: .05em; text-transform: uppercase; }
+
+/* Projects grid */
+.pf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--size-fluid-3); margin-top: var(--size-9); }
+.pf-card { border: var(--border-size-1) solid var(--foreground-primary); border-radius: var(--radius-3);
+  padding: var(--size-fluid-4); display: flex; flex-direction: column; gap: var(--size-3);
+  background: var(--background-card); transition: transform .2s ease; }
+.pf-card:hover { transform: translateY(-4px); }
+.pf-card__title { font-size: var(--font-size-3); font-weight: 700; margin: 0; }
+.pf-card__body { color: var(--foreground-muted); margin: 0; flex-grow: 1; }
+.pf-tags { display: flex; flex-wrap: wrap; gap: var(--size-1); list-style: none; padding: 0; margin: 0; }
+.pf-tags li { background: var(--background-secondary); border-radius: var(--radius-2);
+  padding: 2px var(--size-2); font-size: var(--font-size-0); }
+.pf-card__links { display: flex; gap: var(--size-3); }
+.pf-card__links a { color: var(--foreground-accent); text-decoration: none; font-weight: 600; }
+.pf-card__links a:hover { text-decoration: underline; }
+
+/* Contact */
+.pf-contact { display: grid; grid-template-columns: 1fr 1fr; gap: var(--size-fluid-5);
+  margin-top: var(--size-9); align-items: start; }
+.pf-contact__links { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--size-3); }
+.pf-contact__links a { color: var(--foreground-primary); text-decoration: none; font-size: var(--font-size-3); }
+.pf-contact__links a:hover { color: var(--foreground-accent); }
+
+/* Forms (contact + reused by admin) */
+.pf-form { display: flex; flex-direction: column; gap: var(--size-3); }
+.pf-field { display: flex; flex-direction: column; gap: var(--size-1); }
+.pf-field span { font-weight: 600; font-size: var(--font-size-0); text-transform: uppercase; letter-spacing: .05em; }
+.pf-input { font: inherit; padding: var(--size-2) var(--size-3); border: var(--border-size-1) solid var(--foreground-primary);
+  border-radius: var(--radius-2); background: var(--background-primary); color: var(--foreground-primary); }
+.pf-input:focus-visible { outline: 2px solid var(--foreground-accent); outline-offset: 1px; }
+.pf-btn { font: inherit; cursor: pointer; align-self: flex-start; padding: var(--size-3) var(--size-4);
+  border: var(--border-size-1) solid var(--foreground-primary); border-radius: var(--radius-2);
+  background: var(--background-accent); color: var(--foreground-secondary); font-weight: 600; }
+.pf-btn:hover { opacity: .9; }
+.pf-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* Flash messages */
+.pf-flash { max-width: var(--size-lg); margin: var(--size-3) auto 0; padding: var(--size-2) var(--size-3); border-radius: var(--radius-2); }
+.pf-flash--ok { background: #ecfdf5; color: #065f46; }
+.pf-flash--err { background: #fef2f2; color: #991b1b; }
+
+@media (max-width: 767px) { .pf-contact { grid-template-columns: 1fr; } }

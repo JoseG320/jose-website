@@ -7,13 +7,14 @@ const path = require('path');
 const fs = require('fs');
 const pool = require('../db/pool');
 const config = require('../config');
-const { requireAdmin } = require('../middleware/auth');
+const { requireAdmin, requirePasswordCurrent } = require('../middleware/auth');
 const { verifyToken } = require('../middleware/csrf');
 
 const router = express.Router();
 
-// Every route below requires an authenticated admin.
+// Every route below requires an authenticated admin. Require passwor
 router.use(requireAdmin);
+router.use(requirePasswordCurrent);
 
 // MULTER
 fs.mkdirSync(config.uploads.dir, { recursive: true });

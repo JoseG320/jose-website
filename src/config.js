@@ -37,10 +37,9 @@ module.exports = {
   sessionSecret: required('SESSION_SECRET', isProd ? undefined : 'dev-insecure-secret-change-me'),
 
   // Admin
-  // ADMIN_USERNAME, ADMIN_PASSWORD
+  // ADMIN_USERNAME
   admin: {
     username: process.env.ADMIN_USERNAME || 'admin',
-    password: process.env.ADMIN_PASSWORD || (isProd ? undefined : 'changeme'),
   },
 
   // Uploads

@@ -1,0 +1,81 @@
+<!-- HERO -->
+<section class="w-box c33xfh3 c1mzb2kd">
+  <div class="w-box c1357293 c9jnjeu c5tmc3l c1ldum37 czr2pxy c155uc7w copqmak c1lxiyww c10zkoym ct8c5y2 c1f64byh c1qyy4dh c18v2pa2 cx6c9kw c174sw29">
+    <div class="w-box cry9bxc c1lfjoq7 c16xs6ny c1wt8a7g c1s46o9r cdczzub c1fhkm63 clv8gve">
+      <div class="w-box cry9bxc c1lfjoq7 c162wrvg c1sldgd7 c1rstvfo c12f3mdq cm7fzb7 cxuma7n">
+        <div class="w-text c160atll c11dowh9 c32myit cwrra4i">Hello there. I am...</div>
+        <h1 class="w-heading c11nr3ex c10r87ok c11dowh9 c32myit cwrra4i"><%= settings.display_name %></h1>
+        <p class="w-paragraph"><span class="w-text"><%= settings.bio %></span></p>
+      </div>
+      <div class="w-box c891fy0">
+        <% if (settings.github_url) { %>
+        <a href="<%= settings.github_url %>" rel="noopener" class="w-link c1uz1hxp c188j2zq c1b2tb9q c1xm4ef6 c1a8d7ts c122t6uk c1gut7ra cvyaqlm c1wn9gbn ckhl5v6 c135vpv5 c1nouzdk c1qom380 c1hz2opz c1c9nyn co9inq6 c18nx7en c13zjl4p c1jw6uqv cl60rel czukzo6 cmpnn5a">GitHub</a>
+        <% } %>
+        <a href="/resume" class="w-link c1uz1hxp c188j2zq c1b2tb9q c1xm4ef6 c1a8d7ts c122t6uk c1gut7ra cvyaqlm c1wn9gbn ckhl5v6 c135vpv5 c1nouzdk c1qom380 c1hz2opz c1c9nyn co9inq6 c18nx7en c13zjl4p c1jw6uqv cl60rel czukzo6 cmpnn5a">Resume</a>
+      </div>
+    </div>
+    <div class="w-box cc3dq2t">
+      <img class="w-image" src="/assets/portrait.jpg" alt="<%= settings.display_name %>" style="border-radius:var(--radius-3);" />
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="w-box c33xfh3 c1mzb2kd">
+  <div class="w-box c1357293 c9jnjeu c5tmc3l c1ldum37 czr2pxy c155uc7w">
+    <h2 class="w-heading c1dxq9cf c10r87ok c11dowh9 c32myit cwrra4i c1qom380">About</h2>
+    <p class="pf-section__intro">I'm a developer who likes building clean, reliable web apps. I work mostly with Node.js on the back end and care about the details on the front end. <em>(Replace with your own story — what you build, what you're into, what you're looking for.)</em></p>
+    <ul class="pf-skills">
+      <li>HTML</li><li>CSS</li><li>JavaScript</li><li>Node.js</li><li>Express</li><li>PostgreSQL</li>
+    </ul>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="w-box c33xfh3 c1mzb2kd">
+  <div class="w-box c1357293 c9jnjeu c5tmc3l c1ldum37 czr2pxy c155uc7w">
+    <h2 class="w-heading c1dxq9cf c10r87ok c11dowh9 c32myit cwrra4i c1qom380">Projects</h2>
+    <div class="pf-grid">
+      <article class="pf-card">
+        <h3 class="pf-card__title">Portfolio Website</h3>
+        <p class="pf-card__body">This site. Express + EJS + Postgres with a self-hosted admin panel for editing content and the resume.</p>
+        <ul class="pf-tags"><li>Node.js</li><li>EJS</li><li>Postgres</li></ul>
+        <div class="pf-card__links"><a href="#">Live</a><a href="#">Code</a></div>
+      </article>
+      <article class="pf-card">
+        <h3 class="pf-card__title">Project Two</h3>
+        <p class="pf-card__body">One or two sentences on the problem it solved and what you built.</p>
+        <ul class="pf-tags"><li>React</li><li>API</li></ul>
+        <div class="pf-card__links"><a href="#">Live</a><a href="#">Code</a></div>
+      </article>
+      <article class="pf-card">
+        <h3 class="pf-card__title">Project Three</h3>
+        <p class="pf-card__body">Keep each card short — link out for the detail.</p>
+        <ul class="pf-tags"><li>Python</li></ul>
+        <div class="pf-card__links"><a href="#">Code</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="w-box c33xfh3 c1mzb2kd">
+  <div class="w-box c1357293 c9jnjeu c5tmc3l c1ldum37 czr2pxy c155uc7w">
+    <h2 class="w-heading c1dxq9cf c10r87ok c11dowh9 c32myit cwrra4i c1qom380">Contact</h2>
+    <div class="pf-contact">
+      <ul class="pf-contact__links">
+        <% if (settings.email) { %><li><a href="mailto:<%= settings.email %>"><%= settings.email %></a></li><% } %>
+        <% if (settings.github_url) { %><li><a href="<%= settings.github_url %>" rel="noopener">GitHub</a></li><% } %>
+        <% if (settings.linkedin_url) { %><li><a href="<%= settings.linkedin_url %>" rel="noopener">LinkedIn</a></li><% } %>
+      </ul>
+      <form action="/contact" method="post" class="pf-form">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+        <div class="pf-hp" aria-hidden="true"><label>Leave blank<input type="text" name="website" tabindex="-1" autocomplete="off" /></label></div>
+        <label class="pf-field"><span>Name</span><input class="pf-input" type="text" name="name" required /></label>
+        <label class="pf-field"><span>Email</span><input class="pf-input" type="email" name="email" required /></label>
+        <label class="pf-field"><span>Message</span><textarea class="pf-input" name="message" rows="4" required></textarea></label>
+        <button class="pf-btn" type="submit">Send message</button>
+      </form>
+    </div>
+  </div>
+</section>

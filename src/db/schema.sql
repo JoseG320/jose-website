@@ -1,12 +1,14 @@
 -- admins
--- Admin accounts. For a personal portfolio you'll likely have exactly one row,
+-- Admin accounts. Made it so that 
 CREATE TABLE IF NOT EXISTS admins (
   id            SERIAL PRIMARY KEY,
   username      TEXT NOT NULL UNIQUE,
   password_hash TEXT NOT NULL,
+  must_change_password BOOLEAN NOT NULL DEFAULT false,
   created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
   last_login_at TIMESTAMPTZ
 );
+ALTER TABLE admins ADD COLUMN IF NOT EXISTS must_change_password BOOLEAN NOT NULL DEFAULT false;
 
 -- resumes
 -- Uploaded resumes. Files live on disk (a mounted volume); this table is the

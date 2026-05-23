@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('partials/head') %></head>
+<body class="w-body">
+  <div class="w-box">
+    <%- include('partials/nav') %>
+
+    <% if (flashSuccess && flashSuccess.length) { %>
+      <div class="pf-flash pf-flash--ok" role="status"><%= flashSuccess.join(' ') %></div>
+    <% } %>
+    <% if (flashError && flashError.length) { %>
+      <div class="pf-flash pf-flash--err" role="alert"><%= flashError.join(' ') %></div>
+    <% } %>
+
+    <main class="w-box"><%- body %></main>
+    <%- include('partials/footer') %>
+  </div>
+</body>
+</html>

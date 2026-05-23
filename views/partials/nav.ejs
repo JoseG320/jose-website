@@ -1,0 +1,15 @@
+<nav class="w-box c1357293 c9jnjeu c5tmc3l c1ldum37 czr2pxy c155uc7w cry9bxc c1lxiyww ca4qjwu c1cdc69r c18v2pa2 c1qyy4dh cup9vyi c1n5d942 c1y4fwd4 c14yifpe c113k288 c6hjwpc">
+  <a href="/" class="w-link"><%= (typeof settings !== 'undefined' && settings.display_name) ? settings.display_name : 'Portfolio' %></a>
+  <div class="w-box cry9bxc c1lxiyww c1qyy4dh c1wt8a7g c10zkoym ct8c5y2">
+    <a href="/#about" class="w-link c1diw652 cld4m44 c135vpv5 c1e9wxra c1c9nyn co9inq6 c18nx7en c13zjl4p cl60rel czukzo6 c1f2c285">About</a>
+    <a href="/#projects" class="w-link c1diw652 cld4m44 c135vpv5 c1e9wxra c1c9nyn co9inq6 c18nx7en c13zjl4p cl60rel czukzo6 c1f2c285">Projects</a>
+    <a href="/#contact" class="w-link c1diw652 cld4m44 c135vpv5 c1e9wxra c1c9nyn co9inq6 c18nx7en c13zjl4p cl60rel czukzo6 c1f2c285">Contact</a>
+    <% if (isAdmin) { %>
+      <a href="/admin" class="w-link c1diw652 cld4m44 c135vpv5 c1e9wxra c1c9nyn co9inq6 c18nx7en c13zjl4p cl60rel czukzo6 c1f2c285">Admin</a>
+      <form action="/admin/logout" method="post" style="display:inline;margin:0;">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+        <button type="submit" class="w-link c1diw652 cld4m44 c135vpv5 c1e9wxra c1c9nyn co9inq6 c18nx7en c13zjl4p cl60rel czukzo6 c1f2c285" style="background:none;border:0;cursor:pointer;font:inherit;">Sign Out</button>
+      </form>
+    <% } %>
+  </div>
+</nav>

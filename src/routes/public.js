@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const pool = require('../db/pool');
 const config = require('../config');
+const { verifyToken } = require('../middleware/csrf');
 
 const router = express.Router();
 
@@ -28,18 +29,6 @@ router.get('/', async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-router.get('/about', async (req, res, next) => {
-  try {
-    res.render('pages/about', { title: 'About', settings: await getSettings() });
-  } catch (e) { next(e); }
-});
-
-router.get('/projects', async (req, res, next) => {
-  try {
-    res.render('pages/projects', { title: 'Projects', settings: await getSettings() });
-  } catch (e) { next(e); }
-});
-
 router.get('/resume', async (req, res, next) => {
   try {
     res.render('pages/resume', {
@@ -47,12 +36,6 @@ router.get('/resume', async (req, res, next) => {
       settings: await getSettings(),
       resume: await getActiveResume(),
     });
-  } catch (e) { next(e); }
-});
-
-router.get('/contact', async (req, res, next) => {
-  try {
-    res.render('pages/contact', { title: 'Contact', settings: await getSettings() });
   } catch (e) { next(e); }
 });
 
@@ -72,6 +55,23 @@ router.get('/resume/file', async (req, res, next) => {
       `inline; filename="${encodeURIComponent(resume.original_name)}"`
     );
     fs.createReadStream(filePath).pipe(res);
+  } catch (e) { next(e); }
+});
+
+// Public contact form. Honeypot + CSRF; covered by your global rate limiter.
+router.post('/contact', verifyToken, async (req, res, next) => {
+  try {
+    if (req.body.website) return res.redirect('/#contact'); // bot filled the honeypot — drop silently
+    const name  = String(req.body.name  || '').trim().slice(0, 200);
+    const email = String(req.body.email || '').trim().slice(0, 200);
+    const body  = String(req.body.message || '').trim().slice(0, 5000);
+    if (!name || !email || !body) {
+      req.flash('error', 'Please fill in all fields.');
+      return res.redirect('/#contact');
+    }
+    await pool.query('INSERT INTO messages (name, email, body) VALUES ($1, $2, $3)', [name, email, body]);
+    req.flash('success', 'Thanks — your message was sent.');
+    res.redirect('/#contact');
   } catch (e) { next(e); }
 });
 

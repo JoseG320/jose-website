@@ -2,9 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const bcrypt = require('bcryptjs');
 const pool = require('./pool');
-const config = require('../config');
 
 const DEFAULT_SETTINGS = {
   display_name: 'My Name Here',
@@ -29,20 +27,10 @@ async function init() {
     );
   }
 
-  // 3. Seed the admin account if none exists.
+  // 3. Admins are not seeded anymore. Create one with: npm run seed
   const { rows } = await pool.query('SELECT COUNT(*)::int AS n FROM admins');
   if (rows[0].n === 0) {
-    if (!config.admin.password) {
-      throw new Error(
-        'No admin exists and ADMIN_PASSWORD is not set. Set ADMIN_USERNAME and ADMIN_PASSWORD and restart.'
-      );
-    }
-    const hash = await bcrypt.hash(config.admin.password, 12);
-    await pool.query(
-      'INSERT INTO admins (username, password_hash) VALUES ($1, $2)',
-      [config.admin.username, hash]
-    );
-    console.log(`[db] seeded admin user "${config.admin.username}"`);
+    console.warn('[db] No admin account exists yet. Run `npm run seed` to create one.');
   }
 }
 
