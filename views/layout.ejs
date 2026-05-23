@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('partials/head') %></head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <%- include('partials/nav') %>
+
+  <% if (typeof flashSuccess !== 'undefined' && flashSuccess && flashSuccess.length) { %>
+    <div class="flash flash--ok" role="status"><%= flashSuccess.join(' ') %></div>
+  <% } %>
+  <% if (typeof flashError !== 'undefined' && flashError && flashError.length) { %>
+    <div class="flash flash--err" role="alert"><%= flashError.join(' ') %></div>
+  <% } %>
+
+  <main id="main"><%- body %></main>
+
+  <%- include('partials/footer') %>
+
+  <script src="/js/main.js" defer></script>
+</body>
+</html>
