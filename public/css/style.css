@@ -200,10 +200,25 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.1; font-weight: 800; 
 .footer a { color: var(--muted); text-decoration: underline; }
 .footer a:hover { color: var(--accent); }
 
-/* ---------- FLASH MESSAGES ---------- */
-.flash { max-width: var(--maxw); margin: 1rem auto 0; padding: 0.75rem 1rem; border-radius: var(--radius); }
-.flash--ok { background: #e6f7ef; color: #0a6b46; }
-.flash--err { background: #fdecec; color: #a11; }
+/* ---------- TOAST NOTIFICATIONS ---------- */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  padding: 0.85rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 500;
+  font-size: .95rem;
+  white-space: nowrap;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  animation: toast-in 0.3s var(--ease), toast-out 0.4s var(--ease) 4s forwards;
+}
+.toast--ok  { background: #e6f7ef; color: #0a6b46; }
+.toast--err { background: #fdecec; color: #a11; }
+@keyframes toast-in  { from { opacity: 0; transform: translateX(-50%) translateY(12px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+@keyframes toast-out { from { opacity: 1; } to { opacity: 0; pointer-events: none; } }
 
 /* ---------- SCROLL REVEAL ---------- */
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity var(--reveal-dur) var(--ease), transform var(--reveal-dur) var(--ease); }

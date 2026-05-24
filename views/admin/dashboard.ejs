@@ -1,0 +1,119 @@
+<section class="section container">
+  <h1 class="section__title" style="text-align:left;margin-bottom:2.5rem;">Dashboard</h1>
+
+  <!-- ── SITE SETTINGS ────────────────────────────────────── -->
+  <div style="margin-bottom:3.5rem;">
+    <h2 id="settings" style="font-size:1.4rem;margin-bottom:1.25rem;">Site Settings</h2>
+    <form class="form" action="/admin/settings" method="post">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <textarea name="status" placeholder="Short status / bio shown on the homepage"
+                style="min-height:90px;"><%= settings.status || '' %></textarea>
+      <input type="url" name="github_url"   placeholder="GitHub URL"   value="<%= settings.github_url   || '' %>" />
+      <input type="url" name="linkedin_url" placeholder="LinkedIn URL" value="<%= settings.linkedin_url || '' %>" />
+      <button class="btn" type="submit" style="align-self:flex-start;">Save Settings</button>
+    </form>
+  </div>
+
+  <!-- ── MESSAGES ──────────────────────────────────────────── -->
+  <div style="margin-bottom:3.5rem;">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.25rem;">
+      <h2 id="messages" style="font-size:1.4rem;margin:0;">
+        Messages
+        <% const unread = messages.filter(function(m){ return !m.read; }).length; %>
+        <% if (unread > 0) { %>
+          <span id="unread-badge" style="margin-left:.5rem;font-size:.8rem;font-weight:700;
+                       background:var(--accent);color:#fff;
+                       padding:.2rem .55rem;border-radius:99px;">
+            <%= unread %> new
+          </span>
+        <% } %>
+      </h2>
+      <div style="display:flex;gap:.5rem;">
+        <button id="read-all-btn" class="btn" style="padding:.4rem 1rem;font-size:.85rem;">
+          Mark All Read
+        </button>
+        <button id="delete-all-btn" class="btn"
+                style="padding:.4rem 1rem;font-size:.85rem;
+                       background:transparent;color:var(--muted);border:1px solid var(--border);">
+          Delete All
+        </button>
+      </div>
+    </div>
+
+    <div id="messages-list">
+      <%- include('partials/messagelist', { messages: messages, page: page, totalPages: totalPages }) %>
+    </div>
+  </div>
+
+  <!-- ── RESUME ────────────────────────────────────────────── -->
+  <div>
+    <h2 id="resume" style="font-size:1.4rem;margin-bottom:1.25rem;">Resume</h2>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem;">
+      <form class="resume-upload-form" action="/admin/resume" method="post" enctype="multipart/form-data"
+            style="display:flex;flex-direction:column;gap:.75rem;">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+        <label style="font-weight:600;font-size:.9rem;">PDF Resume</label>
+        <input type="file" name="resume" accept="application/pdf" required
+               style="padding:.75rem 1rem;background:var(--surface);
+                      border:1px solid transparent;border-radius:var(--radius);
+                      font:inherit;color:var(--fg);" />
+        <button class="btn" type="submit">Upload PDF</button>
+      </form>
+      <form class="resume-upload-form" action="/admin/resume" method="post" enctype="multipart/form-data"
+            style="display:flex;flex-direction:column;gap:.75rem;">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+        <label style="font-weight:600;font-size:.9rem;">DOCX Resume</label>
+        <input type="file" name="resume"
+               accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+               required
+               style="padding:.75rem 1rem;background:var(--surface);
+                      border:1px solid transparent;border-radius:var(--radius);
+                      font:inherit;color:var(--fg);" />
+        <button class="btn" type="submit">Upload DOCX</button>
+      </form>
+    </div>
+
+    <% if (resumes.length === 0) { %>
+      <p style="color:var(--muted);">No resumes uploaded yet.</p>
+    <% } else { %>
+      <div style="display:flex;flex-direction:column;gap:.75rem;">
+        <% resumes.forEach(function(r) { %>
+          <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
+                      padding:1rem 1.25rem;background:var(--surface);
+                      border-radius:var(--radius);
+                      border:1px solid <%= r.is_active ? 'var(--accent)' : 'transparent' %>;">
+            <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500;">
+              <%= r.original_name %>
+              <% if (r.is_active) { %>
+                <span style="margin-left:.5rem;font-size:.75rem;font-weight:700;
+                             color:var(--accent);text-transform:uppercase;letter-spacing:.05em;">Active</span>
+              <% } %>
+            </span>
+            <span style="font-size:.8rem;color:var(--muted);white-space:nowrap;">
+              <%= r.file_type.toUpperCase() %> &middot;
+              <%= (r.size_bytes / 1024).toFixed(0) %> KB &middot;
+              <%= new Date(r.uploaded_at).toLocaleDateString() %>
+            </span>
+            <div style="display:flex;gap:.5rem;">
+              <% if (!r.is_active) { %>
+                <form class="resume-activate-form" action="/admin/resume/<%= r.id %>/activate" method="post">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                  <button class="btn" type="submit" style="padding:.45rem 1rem;font-size:.85rem;">Set Active</button>
+                </form>
+              <% } %>
+              <form class="resume-delete-form" action="/admin/resume/<%= r.id %>/delete" method="post">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                <button class="btn" type="submit"
+                        style="padding:.45rem 1rem;font-size:.85rem;
+                               background:transparent;color:var(--muted);border:1px solid var(--border);">
+                  Delete
+                </button>
+              </form>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>

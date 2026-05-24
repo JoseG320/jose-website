@@ -20,11 +20,14 @@ function passwordProblem(pw) {
 
 router.get('/login', (req, res) => {
   if (req.session.adminId) return res.redirect('/admin');
-  res.render('admin/login', { title: 'Admin Login', layout: 'layout' });
+  res.render('admin/login', { title: 'Admin Login', layout: 'admin/adminlayout' });
 });
 
 router.post('/login', loginLimiter, verifyToken, async (req, res, next) => {
   try {
+    // Honeypot
+    if (req.body.website) return res.redirect('/admin/login');
+
     const { username, password } = req.body;
     if (!username || !password) {
       req.flash('error', 'Username and password are required.');
@@ -34,24 +37,51 @@ router.post('/login', loginLimiter, verifyToken, async (req, res, next) => {
     const { rows } = await pool.query('SELECT * FROM admins WHERE username = $1', [username]);
     const admin = rows[0];
 
-    // Always run a compare even if the user doesn't exist (avoids timing leak).
+    // Check lockout
+    if (admin && admin.locked_until && new Date(admin.locked_until) > new Date()) {
+      const minutesLeft = Math.ceil((new Date(admin.locked_until) - new Date()) / 60000);
+      req.flash('error', `Account locked. Try again in ${minutesLeft} minute${minutesLeft !== 1 ? 's' : ''}.`);
+      return res.redirect('/admin/login');
+    }
+
+    // Always run compare to prevent timing attacks
     const hash = admin ? admin.password_hash
       : '$2a$12$invalidinvalidinvalidinvalidinvalidinvalidinvalidinv';
     const ok = await bcrypt.compare(password, hash);
 
     if (!admin || !ok) {
+      // Increment failed attempts if admin exists
+      if (admin) {
+        const attempts = (admin.failed_attempts || 0) + 1;
+        const lockedUntil = attempts >= 10
+          ? new Date(Date.now() + 30 * 60 * 1000) // lock for 30 mins after 10 failures
+          : null;
+        await pool.query(
+          'UPDATE admins SET failed_attempts = $1, locked_until = $2 WHERE id = $3',
+          [attempts, lockedUntil, admin.id]
+        );
+        if (lockedUntil) {
+          console.warn(`[auth] Account "${username}" locked after ${attempts} failed attempts.`);
+          req.flash('error', 'Too many failed attempts. Account locked for 30 minutes.');
+          return res.redirect('/admin/login');
+        }
+      }
+      console.warn(`[auth] Failed login attempt for username: "${username}" from IP: ${req.ip}`);
       req.flash('error', 'Invalid credentials.');
       return res.redirect('/admin/login');
     }
 
+    // Successful login — reset counters
     const returnTo = req.session.returnTo;
     req.session.regenerate(async (err) => {
       if (err) return next(err);
-      req.session.adminId = admin.id;
+      req.session.adminId       = admin.id;
       req.session.adminUsername = admin.username;
       req.session.mustChangePassword = admin.must_change_password;
-      await pool.query('UPDATE admins SET last_login_at = now() WHERE id = $1', [admin.id]);
-
+      await pool.query(
+        'UPDATE admins SET last_login_at = now(), failed_attempts = 0, locked_until = null WHERE id = $1',
+        [admin.id]
+      );
       if (admin.must_change_password) return res.redirect('/admin/change-password');
       res.redirect(returnTo && returnTo.startsWith('/admin') ? returnTo : '/admin');
     });
@@ -59,10 +89,11 @@ router.post('/login', loginLimiter, verifyToken, async (req, res, next) => {
 });
 
 router.get('/change-password', requireAdmin, (req, res) => {
+  if (!req.session.mustChangePassword) return res.redirect('/admin');
   res.render('admin/change-password', {
     title: 'Change Password',
-    layout: 'layout',
-    forced: Boolean(req.session.mustChangePassword),
+    layout: 'admin/adminlayout',
+    forced: true,
   });
 });
 

@@ -20,8 +20,10 @@ module.exports = {
   isProd,
 
   // App
-  // PORT, TRUST_PROXY
+  // PORT, SITE_URL, TRUST_PROXY
   port: parseInt(process.env.PORT || '3000', 10),
+
+  siteUrl: process.env.SITE_URL || 'http://localhost:3000',
 
   // set TRUST_PROXY=1 when set up with NGINX!
   trustProxy: process.env.TRUST_PROXY === '1' ? 1 : false,
@@ -52,7 +54,17 @@ module.exports = {
   // Cloudflare Turnstile
   // TURNSTILE_SITE_KEY, TURNSTILE_SECRET_KEY
   turnstile: {
-  siteKey: process.env.TURNSTILE_SITE_KEY || '',
-  secretKey: process.env.TURNSTILE_SECRET_KEY || '',
-},
+    siteKey: process.env.TURNSTILE_SITE_KEY || '',
+    secretKey: process.env.TURNSTILE_SECRET_KEY || '',
+  },
+
+  // Resend
+  // RESEND_API_KEY
+  // RESEND_FROM
+  // RESEND_TO
+  resend: {
+    apiKey: process.env.RESEND_API_KEY || '',
+    from:   process.env.RESEND_FROM   || '',
+    to:     process.env.RESEND_TO     || '',
+  },
 };

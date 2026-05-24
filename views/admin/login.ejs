@@ -1,0 +1,14 @@
+<section class="section container">
+  <div style="max-width:420px;margin-inline:auto;">
+    <h1 class="section__title" style="margin-bottom:2rem;">Admin</h1>
+    <form class="form" action="/admin/login" method="post">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <div class="honeypot" aria-hidden="true">
+        <label>Leave blank<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+      </div>
+      <input type="text"     name="username" placeholder="Username" autocomplete="username"  required />
+      <input type="password" name="password" placeholder="Password" autocomplete="current-password" required />
+      <button class="btn" type="submit" style="width:100%;margin-top:.5rem;">Sign In</button>
+    </form>
+  </div>
+</section>

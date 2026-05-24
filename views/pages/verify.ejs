@@ -1,0 +1,20 @@
+<section class="section container">
+  <div style="max-width:480px;margin-inline:auto;text-align:center;">
+    <% if (success) { %>
+      <div style="font-size:3rem;margin-bottom:1rem;">✓</div>
+      <h1 style="font-size:2rem;margin-bottom:1rem;">Message sent!</h1>
+      <p style="color:var(--muted);margin-bottom:2rem;"> Your message has been verified and delivered to me. Thank you so much for reaching out. I'll get back to you as soon as possible so that an email thread can be started.</p>
+      <p style="color:var(--muted);margin-bottom:2rem;"> -Jose G</p>
+
+    <% } else { %>
+      <div style="font-size:3rem;margin-bottom:1rem;">✗</div>
+      <h1 style="font-size:2rem;margin-bottom:1rem;">Link invalid</h1>
+      <p style="color:var(--muted);margin-bottom:2rem;">
+        Sorry! This verification link has either already been used or expired (links are valid for 24 hours).
+        If you still want to get in touch, feel free to submit the form again, or just email me at: <a href="mailto:josegaspar.320@gmail.com">josegaspar.320@gmail.com</a>
+      </p>
+      <p style="color:var(--muted);margin-bottom:2rem;">Thank you.</p>
+    <% } %>
+    <a class="btn" href="/">Home</a>
+  </div>
+</section>

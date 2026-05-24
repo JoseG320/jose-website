@@ -1,0 +1,59 @@
+<% if (messages.length === 0) { %>
+  <p style="color:var(--muted);">No messages yet.</p>
+<% } else { %>
+  <% messages.forEach(function(m) { %>
+    <div class="msg-card" data-id="<%= m.id %>" data-unread="<%= !m.read %>"
+         style="padding:1.1rem 1.25rem;background:var(--surface);
+                border-radius:var(--radius);margin-bottom:.75rem;
+                border-left:3px solid <%= m.read ? 'var(--border)' : 'var(--accent)' %>;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+        <div>
+          <span style="font-weight:600;"><%= m.name %></span>
+          <span style="color:var(--muted);font-size:.85rem;margin-left:.5rem;"><%= m.email %></span>
+          <span style="color:var(--muted);font-size:.8rem;margin-left:.75rem;">
+            <%= new Date(m.created_at).toLocaleDateString() %>
+          </span>
+        </div>
+        <div style="display:flex;gap:.5rem;flex-shrink:0;">
+          <% if (!m.read) { %>
+            <button class="btn msg-read-btn" data-id="<%= m.id %>"
+                    style="padding:.35rem .85rem;font-size:.8rem;">
+              Mark Read
+            </button>
+          <% } %>
+          <button class="btn msg-delete-btn" data-id="<%= m.id %>"
+                  style="padding:.35rem .85rem;font-size:.8rem;
+                         background:transparent;color:var(--muted);
+                         border:1px solid var(--border);">
+            Delete
+          </button>
+        </div>
+      </div>
+      <p style="margin-top:.65rem;color:var(--fg);white-space:pre-wrap;"><%= m.body %></p>
+    </div>
+  <% }) %>
+<% } %>
+
+<div id="messages-pager">
+  <% if (totalPages > 1) { %>
+    <div style="display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:1.5rem;">
+      <% if (page > 1) { %>
+        <button class="btn page-btn" data-page="<%= page - 1 %>"
+                style="padding:.4rem 1rem;font-size:.85rem;">← Prev</button>
+      <% } %>
+      <% for (var i = 1; i <= totalPages; i++) { %>
+        <button class="page-btn" data-page="<%= i %>"
+                style="padding:.4rem .8rem;border-radius:var(--radius);font-size:.85rem;font-weight:600;
+                       border:none;cursor:pointer;
+                       background:<%= i === page ? 'var(--accent)' : 'var(--surface)' %>;
+                       color:<%= i === page ? '#fff' : 'var(--fg)' %>;">
+          <%= i %>
+        </button>
+      <% } %>
+      <% if (page < totalPages) { %>
+        <button class="btn page-btn" data-page="<%= page + 1 %>"
+                style="padding:.4rem 1rem;font-size:.85rem;">Next →</button>
+      <% } %>
+    </div>
+  <% } %>
+</div>

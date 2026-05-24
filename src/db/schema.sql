@@ -22,8 +22,6 @@ CREATE TABLE IF NOT EXISTS resumes (
   is_active     BOOLEAN NOT NULL DEFAULT false,
   uploaded_at   TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE UNIQUE INDEX IF NOT EXISTS resumes_one_active
-  ON resumes (is_active) WHERE is_active = true;
 
 -- site_settings
 -- Free-form editable site settings (display name, tagline, social links, etc).
@@ -42,3 +40,23 @@ CREATE TABLE IF NOT EXISTS session (
   CONSTRAINT session_pkey PRIMARY KEY (sid) NOT DEFERRABLE INITIALLY IMMEDIATE
 );
 CREATE INDEX IF NOT EXISTS IDX_session_expire ON session (expire);
+
+-- messages
+-- Viewable messages from the contact form.
+CREATE TABLE IF NOT EXISTS messages (
+  id         SERIAL PRIMARY KEY,
+  name       TEXT NOT NULL,
+  email      TEXT NOT NULL,
+  body       TEXT NOT NULL,
+  read       BOOLEAN NOT NULL DEFAULT false,
+  verified   BOOLEAN NOT NULL DEFAULT false,
+  token      TEXT UNIQUE,
+  created_at TIMESTAMPTZ  NOT NULL DEFAULT now()
+);
+
+-- migrations
+CREATE TABLE IF NOT EXISTS migrations (
+  id         SERIAL PRIMARY KEY,
+  name       TEXT NOT NULL UNIQUE,
+  applied_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);

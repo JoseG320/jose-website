@@ -1,0 +1,35 @@
+<section class="section container">
+  <% if (!resume) { %>
+    <div style="text-align:center;padding:4rem 0;color:var(--muted);">
+      <p style="font-size:1.25rem;margin-bottom:1rem;">No resume uploaded yet.</p>
+      <p>Check back soon.</p>
+    </div>
+  <% } else { %>
+    <div style="display:flex;justify-content:flex-end;gap:1rem;margin-bottom:1rem;">
+      <% if (docx) { %>
+        <a class="btn"
+           href="/resume/docx/<%= docx.original_name %>"
+           style="background:transparent;color:var(--fg);border:1px solid var(--border);">
+          Download DOCX
+        </a>
+      <% } %>
+      <a class="btn"
+         href="/resume/file/<%= resume.original_name %>"
+         download="<%= resume.original_name %>">
+        Download PDF
+      </a>
+    </div>
+    <div style="width:100%;aspect-ratio:8.5/11;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);">
+      <object
+        data="/resume/file/<%= resume.original_name %>"
+        type="application/pdf"
+        style="width:100%;height:100%;">
+        <p style="padding:2rem;color:var(--muted);text-align:center;">
+          Your browser can't display PDFs inline.
+          <a href="/resume/file/<%= resume.original_name %>"
+             download="<%= resume.original_name %>">Download it instead.</a>
+        </p>
+      </object>
+    </div>
+  <% } %>
+</section>

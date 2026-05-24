@@ -34,9 +34,11 @@ function verifyToken(req, res, next) {
     req.get('x-xsrf-token');
 
   if (!safeEqual(sent, req.session.csrfToken)) {
+    if (req.get('x-requested-with') === 'xmlhttprequest') {
+      return res.status(403).json({ ok: false, error: 'Invalid CSRF token.' });
+    }
     res.status(403);
     req.flash('error', 'Security check failed (invalid form token). Please try again.');
-    // Send them somewhere sensible rather than a dead 403 page.
     return res.redirect(req.get('referer') || '/');
   }
   next();
