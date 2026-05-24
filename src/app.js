@@ -37,11 +37,11 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'"],
+        scriptSrc: ["'self'", 'https://challenges.cloudflare.com'],
         styleSrc: ["'self'", "'unsafe-inline'"],
         imgSrc: ["'self'", 'data:'],
         objectSrc: ["'self'"], // important for embedding the resume PDF
-        frameSrc: ["'self'"],
+        frameSrc: ["'self'", 'https://challenges.cloudflare.com'],
         upgradeInsecureRequests: config.isProd ? [] : null,
       },
     },

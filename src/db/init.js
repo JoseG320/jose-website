@@ -7,7 +7,7 @@ const pool = require('./pool');
 const DEFAULT_SETTINGS = {
   display_name: 'My Name Here',
   tagline: 'Tagline Here',
-  bio: 'Short Intro Here',
+  status: 'Short Intro Here',
   email: '',
   github_url: '',
   linkedin_url: '',

@@ -48,4 +48,11 @@ module.exports = {
     dir: process.env.UPLOAD_DIR || require('path').join(__dirname, '..', 'uploads'),
     maxBytes: parseInt(process.env.UPLOAD_MAX_BYTES || '5242880', 10), // 5 MB
   },
+  
+  // Cloudflare Turnstile
+  // TURNSTILE_SITE_KEY, TURNSTILE_SECRET_KEY
+  turnstile: {
+  siteKey: process.env.TURNSTILE_SITE_KEY || '',
+  secretKey: process.env.TURNSTILE_SECRET_KEY || '',
+},
 };

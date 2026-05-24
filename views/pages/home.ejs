@@ -4,7 +4,7 @@
     <div class="hero__text">
       <p class="hero__eyebrow">Hello there. I am...</p>
       <h1 class="hero__name">Jose Gaspar Marin</h1>
-      <p class="hero__bio"><%= (settings && settings.bio) || 'Editable bio from the admin panel here!' %></p>
+      <p class="hero__bio"><%= (settings && settings.status) || 'Editable bio from the admin panel here!' %></p>
       <div class="hero__actions">
         <a class="btn" href="https://www.github.com/JoseG320">GitHub</a>
         <a class="btn" href="/resume">Resume</a>
@@ -26,8 +26,18 @@
       <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>
     </div>
     <div class="about__body">
-      <p>I'm Jose Gaspar Marin.</p>
-      <p>I was born and raised in New Haven, CT.</p>
+      <p>I'm Jose Gaspar Marin, a Computer Science graduate from Southern Connecticut State University, born and raised in New Haven, CT.</p>
+      <p>I have 5 years of experience in IT, working as an IT Technical Support Engineer at SCSU. I have resolved 1,300+ support tickets, deploying and managing Windows and macOS devices university-wide, and built internal tools that made the team more effective.</p>
+      <p>Outside of IT, I build full-stack web applications. My capstone project, CS Library, is a real library management system slated for deployment at SCSU. I'm now looking for my next opportunity in software engineering or IT.</p>
+    </div>
+  </div>
+  <div class="about__grid about__grid--flip" style="margin-top: clamp(3rem, 6vw, 5rem);">
+    <div>
+      <h3 class="about__lead">My Personal Side.</h3>
+      <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>
+    </div>
+    <div class="about__body">
+      <p>I've always had passion for technology and computers for as long as I can remember. I knew that it was something that I wanted to do when I grew up. </p>
     </div>
   </div>
 </section>
@@ -43,10 +53,9 @@
       <p class="project__desc">a library cataloging system</p>
     </div>
     <div class="project__body">
-      <p>One of the biggest and most challenging projects I have done so far is CS Library, a computer science capstone project.</p>
-      <p>The only reason why it was</p>
-      <p>Despite the difficulties the project team and I had, we pulled through and deployed a complete that will be maintained by the Computer Science Department.</p>
-      <p></p>
+      <p>CS Library is my senior capstone project, built as a 3-person team. Our client was the Department of Computer Science at Southern Connecticut State Univerisity. We were tasked with a solution to replace the manual checkout system the CS library used.</p>
+      <p>We built a student-facing web portal, a kiosk interface for a Raspberry Pi, and a full admin toolset. We also integrated Microsoft OAuth single sign-on and wired the separate Raspberry Pi checkout kiosk to the server via a shared-key REST API.</p>
+      <p>This was built on Express.js, TypeScript, Drizzle ORM, PostgreSQL, and Docker. It will be maintained by the SCSU Computer Science Department going forward.</p>
     </div>
   </article>
 
@@ -57,9 +66,9 @@
       <p class="project__desc">a zone-aware security system</p>
     </div>
     <div class="project__body">
-      <p>Privacy and security is something I take extremely seriously. It is a fundamental right that we should all have, no matter the scope.</p>
-      <p>This especially holds true with having privacy and security solution in your own home. The problem with that is how expensive and difficult those services and systems are to use.</p>
-      <p>Thats when I came up with Sentinel. The solution to the problem.</p>
+      <p>Privacy and security is something I take extremely seriously. It's a fundamental right that we should all have in all scopes, especially home security. The thing is... Solutions for that are expensive, locked behind subscriptions, and are difficult to self-host and maintain.</p>
+      <p>Sentinel is my answer to that. Built with a team member, Sentinel is a low cost and easy to use system that detects people in real time from camera streams and matches detections against user-defined "smart zones" with configurable alert levels.</p>
+      <p>This was built with Python, FastAPI, Google Cloud Vision API, and a Streamlit dashboard with role-based access control and live event logging, all backed by PostgreSQL.</p>
     </div>
   </article>
 
@@ -70,9 +79,9 @@
       <p class="project__desc">a music comparator app</p>
     </div>
     <div class="project__body">
-      <p>I love music. Music is everything to me.</p>
-      <p>Echo is the first project I have worked on with a database. Its a social media platform where users can add songs to their library, add songs to playlists, view songs by other people, and compare your music library with other users.</p>
-      <p>I would love to expand on this product in the future, to make it a full fledged application.</p>
+      <p>I love music. Music is everything to me. When I connected with a teammate </p>
+      <p>That is how Echo was made and who it was made for. Echo is a social music-library web app where users manage playlists, browse other users' libraries, and compare profiles to find songs in common. It was my first project with a relational database schema, and it includes secure hashed-password authentication and an admin panel.</p>
+      <p>This application was built with PHP, MySQL, Apache, and Docker. I'd love to expand it into a full-fledged application someday. The comparison feature, fostering an online connection using music, has a lot of potential.</p>
     </div>
   </article>
 </section>
@@ -84,8 +93,8 @@
     <div>
       <h3 class="contact__lead">Let's work together.</h3>
       <div class="contact__text">
-        <p>I'm always available to seek opportunities for work and would love to collaborate with you, whether that would be on a job or project.</p>
-        <p>I'm always available </p>
+        <p>I'm always open to work. Whether that's a job, a freelance project, or a collaboration. If you think we'd work well together, I'd love to hear from you. Fill out the form to reach out to me!</p>
+        <p>I'm also free to talk about anything other than opportunities. If you want to talk to me about video games, music, a hobby you are working on, or just want to say hi, reach out!</p>
       </div>
     </div>
     <form class="form" action="/contact" method="post">
@@ -95,7 +104,8 @@
       <input type="email" name="email" placeholder="Email" required />
       <input type="text" name="subject" placeholder="Subject" />
       <textarea name="message" placeholder="Message" required></textarea>
-      <button class="btn" type="submit">Submit</button>
+      <div class="cf-turnstile" data-sitekey="<%= turnstileSiteKey %>"></div>
+      <button class="btn" type="submit" id="contact-submit" disabled>Submit</button>
     </form>
   </div>
 </section>

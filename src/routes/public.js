@@ -25,7 +25,7 @@ async function getActiveResume() {
 
 router.get('/', async (req, res, next) => {
   try {
-    res.render('pages/home', { title: 'Home', settings: await getSettings() });
+    res.render('pages/home', { title: 'Home', settings: await getSettings(), turnstileSiteKey: config.turnstile.siteKey });
   } catch (e) { next(e); }
 });
 
@@ -69,6 +69,23 @@ router.post('/contact', verifyToken, async (req, res, next) => {
       req.flash('error', 'Please fill in all fields.');
       return res.redirect('/#contact');
     }
+
+    const token = req.body['cf-turnstile-response'];
+    if (!token) {
+      req.flash('error', 'Please complete the CAPTCHA.');
+      return res.redirect('/#contact');
+    }
+    const verify = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret: config.turnstile.secretKey, response: token }),
+    });
+    const verifyResult = await verify.json();
+    if (!verifyResult.success) {
+      req.flash('error', 'CAPTCHA check failed. Please try again.');
+      return res.redirect('/#contact');
+    }
+
     await pool.query('INSERT INTO messages (name, email, body) VALUES ($1, $2, $3)', [name, email, body]);
     req.flash('success', 'Thanks — your message was sent.');
     res.redirect('/#contact');

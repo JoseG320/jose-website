@@ -55,4 +55,30 @@
     // No observer support → just show everything.
     revealEls.forEach(function (el) { el.classList.add('is-visible'); });
   }
+
+  /* ---- Contact form submit gate ---- */
+  var form = document.querySelector('.form');
+  if (form) {
+    var submitBtn = document.getElementById('contact-submit');
+    var nameInput = form.querySelector('input[name="name"]');
+    var emailInput = form.querySelector('input[name="email"]');
+    var messageInput = form.querySelector('textarea[name="message"]');
+
+    function checkForm() {
+      var fieldsFilled = nameInput.value.trim() !== '' &&
+                        emailInput.value.trim() !== '' &&
+                        messageInput.value.trim() !== '';
+      var turnstileDone = form.querySelector('[name="cf-turnstile-response"]') &&
+                          form.querySelector('[name="cf-turnstile-response"]').value !== '';
+      submitBtn.disabled = !(fieldsFilled && turnstileDone);
+    }
+
+    nameInput.addEventListener('input', checkForm);
+    emailInput.addEventListener('input', checkForm);
+    messageInput.addEventListener('input', checkForm);
+
+    // Turnstile injects its token into a hidden input asynchronously,
+    // so we poll for it rather than listening for a DOM event.
+    setInterval(checkForm, 500);
+  }
 })();
