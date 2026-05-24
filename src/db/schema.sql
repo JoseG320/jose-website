@@ -5,10 +5,11 @@ CREATE TABLE IF NOT EXISTS admins (
   username      TEXT NOT NULL UNIQUE,
   password_hash TEXT NOT NULL,
   must_change_password BOOLEAN NOT NULL DEFAULT false,
+  failed_attempts INT NOT NULL DEFAULT 0,
+  locked_until  TIMESTAMPTZ,
   created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
   last_login_at TIMESTAMPTZ
 );
-ALTER TABLE admins ADD COLUMN IF NOT EXISTS must_change_password BOOLEAN NOT NULL DEFAULT false;
 
 -- resumes
 -- Uploaded resumes. Files live on disk (a mounted volume); this table is the
@@ -19,9 +20,12 @@ CREATE TABLE IF NOT EXISTS resumes (
   original_name TEXT NOT NULL,        -- what the user uploaded it as
   mime_type     TEXT NOT NULL,
   size_bytes    BIGINT NOT NULL,
+  file_type     TEXT NOT NULL DEFAULT 'pdf',
   is_active     BOOLEAN NOT NULL DEFAULT false,
   uploaded_at   TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+CREATE UNIQUE INDEX IF NOT EXISTS resumes_one_active_per_type
+  ON resumes (file_type) WHERE is_active = true;
 
 -- site_settings
 -- Free-form editable site settings (display name, tagline, social links, etc).
@@ -53,6 +57,7 @@ CREATE TABLE IF NOT EXISTS messages (
   token      TEXT UNIQUE,
   created_at TIMESTAMPTZ  NOT NULL DEFAULT now()
 );
+CREATE INDEX IF NOT EXISTS messages_token_idx ON messages (token);
 
 -- migrations
 CREATE TABLE IF NOT EXISTS migrations (
