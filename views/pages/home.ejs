@@ -6,13 +6,22 @@
       <h1 class="hero__name">Jose Gaspar Marin</h1>
       <p class="hero__bio"><%= (settings && settings.status) || 'Editable bio from the admin panel here!' %></p>
       <div class="hero__actions">
-        <a class="btn" href="https://www.github.com/JoseG320">GitHub</a>
+        <% if (settings.github_url) { %>
+          <a class="btn" href="<%= settings.github_url %>" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <% } %>
+        <% if (settings.linkedin_url) { %>
+          <a class="btn" href="<%= settings.linkedin_url %>" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <% } %>
         <a class="btn" href="/resume">Resume</a>
       </div>
     </div>
     <div class="hero__photo">
-      <!-- Replace this whole .placeholder div with: <img src="/img/portrait.jpg" alt="..."> -->
-      <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>
+      <% if (settings.photo_hero) { %>
+        <img src="/img/<%= settings.photo_hero %>" alt="Jose Gaspar Marin"
+             style="border-radius:var(--radius);width:100%;max-width:360px;aspect-ratio:1/1;object-fit:cover;" />
+      <% } else { %>
+        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>
+      <% } %>
     </div>
   </div>
 </section>
@@ -23,7 +32,12 @@
   <div class="about__grid">
     <div>
       <h3 class="about__lead">Nice to meet you.</h3>
-      <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>
+      <% if (settings.photo_about_1) { %>
+        <img src="/img/<%= settings.photo_about_1 %>" alt="About"
+             style="border-radius:var(--radius);width:100%;aspect-ratio:1/1;object-fit:cover;" />
+      <% } else { %>
+        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>
+      <% } %>
     </div>
     <div class="about__body">
       <p>I'm Jose Gaspar Marin, a Computer Science graduate from Southern Connecticut State University, born and raised in New Haven, CT.</p>
@@ -34,7 +48,12 @@
   <div class="about__grid about__grid--flip" style="margin-top: clamp(3rem, 6vw, 5rem);">
     <div>
       <h3 class="about__lead">My Personal Side.</h3>
-      <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>
+      <% if (settings.photo_about_2) { %>
+        <img src="/img/<%= settings.photo_about_2 %>" alt="Personal"
+             style="border-radius:var(--radius);width:100%;aspect-ratio:1/1;object-fit:cover;" />
+      <% } else { %>
+        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>
+      <% } %>
     </div>
     <div class="about__body">
       <p>I've always had passion for technology and computers for as long as I can remember. I knew that it was something that I wanted to do when I grew up. </p>
@@ -48,12 +67,12 @@
 
   <article class="project">
     <div class="project__media">
-      <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>
-      <h3 class="project__title">CS Library</h3>
+      <img src="/img/project1.png" alt="Home Page of CS Library">
+      <h3 class="project__title"><a href="https://github.com/JoseG320/CS_Library_Nuc_Project" target="_blank" rel="noopener noreferrer">CS Library</a></h3>
       <p class="project__desc">a library cataloging system</p>
     </div>
     <div class="project__body">
-      <p>CS Library is my senior capstone project, built as a 3-person team. Our client was the Department of Computer Science at Southern Connecticut State Univerisity. We were tasked with a solution to replace the manual checkout system the CS library used.</p>
+      <p>CS Library was a senior capstone project I took part in, built as a 3-person team. Our client was the Department of Computer Science at Southern Connecticut State Univerisity. We were tasked with a solution to replace the manual checkout system the CS library used.</p>
       <p>We built a student-facing web portal, a kiosk interface for a Raspberry Pi, and a full admin toolset. We also integrated Microsoft OAuth single sign-on and wired the separate Raspberry Pi checkout kiosk to the server via a shared-key REST API.</p>
       <p>This was built on Express.js, TypeScript, Drizzle ORM, PostgreSQL, and Docker. It will be maintained by the SCSU Computer Science Department going forward.</p>
     </div>
@@ -61,8 +80,8 @@
 
   <article class="project">
     <div class="project__media">
-      <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>
-      <h3 class="project__title">Sentinel</h3>
+      <img src="/img/project2.png" alt="Dashboard of Sentinel, with a camera feed up and running.">
+      <h3 class="project__title"><a href="https://github.com/JoseG320/sentinel" target="_blank" rel="noopener noreferrer">Sentinel</a></h3>
       <p class="project__desc">a zone-aware security system</p>
     </div>
     <div class="project__body">
@@ -74,8 +93,8 @@
 
   <article class="project">
     <div class="project__media">
-      <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>
-      <h3 class="project__title">Echo</h3>
+      <img src="/img/project3.png" alt="Echo, where you can add your favorite songs to share.">
+      <h3 class="project__title"><a href="https://github.com/JoseG320/Echo-php" target="_blank" rel="noopener noreferrer">Echo</a></h3>
       <p class="project__desc">a music comparator app</p>
     </div>
     <div class="project__body">
@@ -84,6 +103,27 @@
       <p>This application was built with PHP, MySQL, Apache, and Docker. I'd love to expand it into a full-fledged application someday. The comparison feature, fostering an online connection using music, has a lot of potential.</p>
     </div>
   </article>
+  <!--
+  Use for the extra project page.
+  <div style="text-align:center;margin-top:3rem;">
+    <a class="btn" href="/projects">View More of My Work</a>
+  </div>
+  -->
+
+  <!--
+  Then uncomment the projects route in public and create projects.ejs like this:
+
+  <section class="section container">
+  <h1 class="section__title">Projects</h1>
+  <p style="text-align:center;color:var(--muted);margin-top:-1rem;margin-bottom:3rem;">
+    Everything I have built.
+  </p>
+
+  Add future projects here using the same article.project structure
+
+  </section>
+
+  -->
 </section>
 
 <!-- CONTACT -->

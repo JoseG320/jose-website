@@ -16,7 +16,7 @@ const router = express.Router();
 router.use(requireAdmin);
 router.use(requirePasswordCurrent);
 
-// MULTER
+// MULTERS
 fs.mkdirSync(config.uploads.dir, { recursive: true });
 
 const storage = multer.diskStorage({
@@ -39,6 +39,32 @@ const upload = multer({
     cb(new Error('Only PDF and DOCX files are allowed.'));
   },
 });
+
+// IMAGE MULTER
+const imageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const dir = path.join(__dirname, '../../public/img');
+    fs.mkdirSync(dir, { recursive: true });
+    cb(null, dir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    cb(null, `${req.params.slot}-${Date.now()}${ext}`);
+  },
+});
+
+const imageUpload = multer({
+  storage: imageStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  fileFilter: (req, file, cb) => {
+    const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+    if (allowed.includes(file.mimetype)) return cb(null, true);
+    cb(new Error('Only JPG, PNG, or WEBP images are allowed.'));
+  },
+});
+
+const PHOTO_SLOTS = ['photo_hero', 'photo_about_1', 'photo_about_2'];
+
 
 // DASHBOARD
 router.get('/', async (req, res, next) => {
@@ -72,9 +98,7 @@ router.get('/', async (req, res, next) => {
 
 // RESUME UPLOAD
 // NOTE: multer must run BEFORE verifyToken so req.body._csrf is populated.
-router.post(
-  '/resume',
-  (req, res, next) => {
+router.post('/resume', (req, res, next) => {
     upload.single('resume')(req, res, (err) => {
       if (err) {
         req.flash('error', err.message || 'Upload failed.');
@@ -147,24 +171,6 @@ router.post('/resume/:id/delete', verifyToken, async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-// SITE SETTINGS UPDATE
-router.post('/settings', verifyToken, async (req, res, next) => {
-  try {
-    const editable = ['status', 'github_url', 'linkedin_url'];
-    for (const key of editable) {
-      if (key in req.body) {
-        await pool.query(
-          `INSERT INTO site_settings (key, value) VALUES ($1, $2)
-           ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
-          [key, String(req.body[key]).slice(0, 5000)]
-        );
-      }
-    }
-    req.flash('success', 'Settings saved.');
-    res.redirect('/admin');
-  } catch (e) { next(e); }
-});
-
 // MARK MESSAGE READ
 router.post('/message/:id/read', verifyToken, async (req, res, next) => {
   try {
@@ -194,6 +200,91 @@ router.post('/messages/delete-all', verifyToken, async (req, res, next) => {
   try {
     await pool.query('DELETE FROM messages WHERE verified = true');
     res.json({ ok: true });
+  } catch (e) { next(e); }
+});
+
+// UPLOAD PHOTO
+router.post(
+  '/photo/:slot',
+  (req, res, next) => {
+    if (!PHOTO_SLOTS.includes(req.params.slot)) return res.redirect('/admin');
+    imageUpload.single('photo')(req, res, (err) => {
+      if (err) {
+        req.flash('error', err.message || 'Upload failed.');
+        return res.redirect('/admin');
+      }
+      next();
+    });
+  },
+  verifyToken,
+  async (req, res, next) => {
+    try {
+      if (!req.file) {
+        req.flash('error', 'No file received.');
+        return res.redirect('/admin');
+      }
+
+      // Delete old photo if one exists
+      const { rows } = await pool.query(
+        'SELECT value FROM site_settings WHERE key = $1',
+        [req.params.slot]
+      );
+      if (rows[0] && rows[0].value) {
+        const oldPath = path.join(__dirname, '../../public/img', rows[0].value);
+        fs.promises.unlink(oldPath).catch(() => {});
+      }
+
+      await pool.query(
+        `INSERT INTO site_settings (key, value) VALUES ($1, $2)
+         ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+        [req.params.slot, req.file.filename]
+      );
+
+      req.flash('success', 'Photo updated.');
+      res.redirect('/admin');
+    } catch (e) { next(e); }
+  }
+);
+
+// DELETE PHOTO
+router.post('/photo/:slot/delete', verifyToken, async (req, res, next) => {
+  try {
+    if (!PHOTO_SLOTS.includes(req.params.slot)) return res.redirect('/admin');
+
+    const { rows } = await pool.query(
+      'SELECT value FROM site_settings WHERE key = $1',
+      [req.params.slot]
+    );
+    if (rows[0] && rows[0].value) {
+      const filePath = path.join(__dirname, '../../public/img', rows[0].value);
+      fs.promises.unlink(filePath).catch(() => {});
+      await pool.query(
+        `INSERT INTO site_settings (key, value) VALUES ($1, '')
+         ON CONFLICT (key) DO UPDATE SET value = ''`,
+        [req.params.slot]
+      );
+    }
+
+    req.flash('success', 'Photo removed.');
+    res.redirect('/admin');
+  } catch (e) { next(e); }
+});
+
+// SITE SETTINGS UPDATE
+router.post('/settings', verifyToken, async (req, res, next) => {
+  try {
+    const editable = ['status', 'github_url', 'linkedin_url'];
+    for (const key of editable) {
+      if (key in req.body) {
+        await pool.query(
+          `INSERT INTO site_settings (key, value) VALUES ($1, $2)
+           ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+          [key, String(req.body[key]).slice(0, 5000)]
+        );
+      }
+    }
+    req.flash('success', 'Settings saved.');
+    res.redirect('/admin');
   } catch (e) { next(e); }
 });
 

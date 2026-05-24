@@ -8,6 +8,9 @@ const DEFAULT_SETTINGS = {
   status:       'Short Status Here',
   github_url:   '',
   linkedin_url: '',
+  photo_hero:    '',
+  photo_about_1: '',
+  photo_about_2: '',
 };
 
 async function runMigrations(client) {

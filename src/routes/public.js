@@ -44,6 +44,7 @@ router.get('/', async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
+// Resume Page
 router.get('/resume', async (req, res, next) => {
   try {
     res.render('pages/resume', {
@@ -176,5 +177,18 @@ router.get('/contact/verify/:token', async (req, res, next) => {
     res.render('pages/verify', { title: 'Message Verified', layout: 'layout', success: true });
   } catch (e) { next(e); }
 });
+
+// For more projects in the future. Note: Use this as a template for more pages!
+/*
+router.get('/projects', async (req, res, next) => {
+  try {
+    res.render('pages/projects', {
+      title: 'Projects',
+      layout: 'layout',
+      settings: await getSettings(),
+    });
+  } catch (e) { next(e); }
+}); 
+*/
 
 module.exports = router;

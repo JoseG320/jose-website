@@ -165,4 +165,34 @@
     });
   });
 
+  // Photo upload/delete forms
+  document.querySelectorAll('.photo-upload-form').forEach(function(form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      fetch(form.action, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'x-csrf-token': csrf, 'x-requested-with': 'xmlhttprequest' },
+        body: new FormData(form),
+      }).finally(function() {
+        window.location.replace('/admin');
+      });
+    });
+  });
+
+  document.querySelectorAll('.photo-delete-form').forEach(function(form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (!confirm('Remove this photo?')) return;
+      fetch(form.action, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'x-csrf-token': csrf, 'x-requested-with': 'xmlhttprequest' },
+        body: new FormData(form),
+      }).finally(function() {
+        window.location.replace('/admin');
+      });
+    });
+  });
+
 })();

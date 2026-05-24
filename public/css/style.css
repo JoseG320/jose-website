@@ -261,3 +261,9 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.1; font-weight: 800; 
   .reveal { opacity: 1; transform: none; transition: none; }
   .btn:hover { transform: none; }
 }
+
+/* Mobile View Buttons */
+@media (max-width: 480px) {
+  .hero__actions { flex-direction: column; }
+  .hero__actions .btn { width: 100%; text-align: center; }
+}

@@ -14,6 +14,54 @@
     </form>
   </div>
 
+  <!-- ── PHOTOS ────────────────────────────────────────────── -->
+  <div style="margin-bottom:3.5rem;">
+    <h2 id="photos" style="font-size:1.4rem;margin-bottom:1.25rem;">Photos</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;">
+
+      <% [
+        { slot: 'photo_hero',    label: 'Hero Portrait' },
+        { slot: 'photo_about_1', label: 'About — Photo 1' },
+        { slot: 'photo_about_2', label: 'About — Photo 2' },
+      ].forEach(function(p) { %>
+        <div style="background:var(--surface);border-radius:var(--radius);padding:1.25rem;display:flex;flex-direction:column;gap:1rem;">
+          <span style="font-weight:600;font-size:.9rem;"><%= p.label %></span>
+
+          <% if (settings[p.slot]) { %>
+            <img src="/img/<%= settings[p.slot] %>"
+                 alt="<%= p.label %>"
+                 style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:var(--radius);" />
+            <form class="photo-delete-form" action="/admin/photo/<%= p.slot %>/delete" method="post">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <button class="btn" type="submit"
+                      style="width:100%;padding:.5rem;font-size:.85rem;
+                             background:transparent;color:var(--muted);border:1px solid var(--border);">
+                Remove Photo
+              </button>
+            </form>
+          <% } else { %>
+            <div style="width:100%;aspect-ratio:1/1;background:var(--border);border-radius:var(--radius);
+                        display:grid;place-items:center;color:var(--muted);font-size:.85rem;">
+              No photo
+            </div>
+          <% } %>
+
+          <form class="photo-upload-form" action="/admin/photo/<%= p.slot %>" method="post" enctype="multipart/form-data"
+                style="display:flex;flex-direction:column;gap:.5rem;">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <input type="file" name="photo" accept="image/jpeg,image/png,image/webp" required
+                   style="padding:.5rem;background:var(--bg);border:1px solid var(--border);
+                          border-radius:var(--radius);font:inherit;font-size:.85rem;color:var(--fg);" />
+            <button class="btn" type="submit" style="padding:.5rem;font-size:.85rem;">
+              <%= settings[p.slot] ? 'Replace' : 'Upload' %>
+            </button>
+          </form>
+        </div>
+      <% }) %>
+
+    </div>
+  </div>
+
   <!-- ── MESSAGES ──────────────────────────────────────────── -->
   <div style="margin-bottom:3.5rem;">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.25rem;">
