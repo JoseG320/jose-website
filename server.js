@@ -23,7 +23,7 @@ async function waitForDbAndInit(retries = 10, delayMs = 2000) {
   try {
     await waitForDbAndInit();
     const server = app.listen(config.port, () => {
-      console.log(`[jose-website] Server listening on http://localhost:${config.port}`);
+      console.log(`[jose-website] Server listening on ${config.siteUrl}`);
     });
 
     // Graceful shutdown.
