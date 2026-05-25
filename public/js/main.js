@@ -81,4 +81,11 @@
     // so we poll for it rather than listening for a DOM event.
     setInterval(checkForm, 500);
   }
+
+  // Typewriter — stop cursor at end of text
+  var tw = document.querySelector('.typewriter');
+  if (tw) {
+    var textWidth = tw.scrollWidth + 'px';
+    tw.style.setProperty('--tw-width', textWidth);
+  }
 })();

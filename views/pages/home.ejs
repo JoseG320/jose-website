@@ -4,7 +4,7 @@
     <div class="hero__text">
       <p class="hero__eyebrow">Hello there. I am...</p>
       <h1 class="hero__name">Jose Gaspar Marin</h1>
-      <p class="hero__bio"><%= (settings && settings.status) || 'Editable bio from the admin panel here!' %></p>
+      <p class="hero__bio typewriter"><%= (settings && settings.status) || 'Editable bio from the admin panel here!' %></p>
       <div class="hero__actions">
         <% if (settings.github_url) { %>
           <a class="btn" href="<%= settings.github_url %>" target="_blank" rel="noopener noreferrer">GitHub</a>
