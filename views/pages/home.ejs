@@ -31,7 +31,7 @@
   <h2 class="section__title">About</h2>
   <div class="about__grid">
     <div>
-      <h3 class="about__lead">Nice to meet you.</h3>
+      <h3 class="about__lead">Who I am.</h3>
       <% if (settings.photo_about_1) { %>
         <img src="/img/<%= settings.photo_about_1 %>" alt="About"
              style="border-radius:var(--radius);width:100%;aspect-ratio:1/1;object-fit:cover;" />
@@ -40,12 +40,13 @@
       <% } %>
     </div>
     <div class="about__body">
-      <p>I'm Jose Gaspar Marin, a Computer Science graduate from Southern Connecticut State University, born and raised in New Haven, CT.</p>
-      <p>I have 5 years of experience in IT, working as an IT Technical Support Engineer at SCSU. I have resolved 1,300+ support tickets, deploying and managing Windows and macOS devices university-wide, and built internal tools that made the team more effective.</p>
-      <p>Outside of IT, I build full-stack web applications. My capstone project, CS Library, is a real library management system slated for deployment at SCSU. I'm now looking for my next opportunity in software engineering or IT.</p>
+      <p>I'm Jose Gaspar Marin, a Computer Science graduate from Southern Connecticut State University based in New Haven, Connecticut.</p>
+      <p>Over the past 5 years, I've worked in IT as a Technical Support Engineer at SCSU, resolving more than 1,300 support tickets while deploying and managing Windows and macOS devices across the university. Along the way, I've built internal tools and improved workflows that helped streamline support operations and improve efficiency.</p>
+      <p>Outside of IT, I enjoy building full-stack applications and exploring systems-focused software engineering. My senior capstone project, CS Library, is a full-stack library management system currently planned for deployment within the SCSU Computer Science Department.</p>
+      <p>I'm currently seeking opportunities in software engineering and IT where I can continue building reliable systems, solving real-world problems, and growing as an engineer.</p>
     </div>
   </div>
-  <div class="about__grid about__grid--flip" style="margin-top: clamp(3rem, 6vw, 5rem);">
+  <div class="about__grid about__grid--flip" style="margin-top: clamp(3rem, 6vw, 5rem);"> 
     <div>
       <h3 class="about__lead">A little more about me!</h3>
       <% if (settings.photo_about_2) { %>
@@ -56,7 +57,9 @@
       <% } %>
     </div>
     <div class="about__body">
-      <p>I've always had passion for technology and computers for as long as I can remember. I knew that it was something that I wanted to do when I grew up. </p>
+      <p>Technology has been a part of my life for as long as I can remember. Growing up, I was always fascinated by computers, games, and the ever growing Internet, which eventually led me toward studying computer science. This is something I have always knew I wanted to be involved in.</p>
+      <p>Outside of programming and IT, I enjoy playing video games, traveling, reading, crafting, drawing, and collecting older technology. One of my favorite things to collect is vintage iPods and other early consumer tech devices. I enjoy learning how older hardware and software were designed, repaired, and used during different eras of computing. </p>
+      <p>I'm especially interested in programming video games, setting up servers for video games, and collecting music CDs.</p>
     </div>
   </div>
 </section>
@@ -69,12 +72,13 @@
     <div class="project__media">
       <img src="/img/project1.png" alt="Home Page of CS Library">
       <h3 class="project__title"><a href="https://github.com/JoseG320/CS_Library_Nuc_Project" target="_blank" rel="noopener noreferrer">CS Library</a></h3>
-      <p class="project__desc">a library cataloging system</p>
+      <p class="project__desc">a full-stack digital library management platform</p>
     </div>
     <div class="project__body">
-      <p>CS Library was a senior capstone project I took part in, built as a 3-person team. Our client was the Department of Computer Science at Southern Connecticut State Univerisity. We were tasked with a solution to replace the manual checkout system the CS library used.</p>
-      <p>We built a student-facing web portal, a kiosk interface for a Raspberry Pi, and a full admin toolset. We also integrated Microsoft OAuth single sign-on and wired the separate Raspberry Pi checkout kiosk to the server via a shared-key REST API.</p>
-      <p>This was built on Express.js, TypeScript, Drizzle ORM, PostgreSQL, and Docker. It will be maintained by the SCSU Computer Science Department going forward.</p>
+      <p>CS Library was a senior capstone project developed as part of a 3-person team for the Department of Computer Science at Southern Connecticut State University. Designed for real departmental use, the platformed replaced the manual library checkout process with a modern digital system that you can checkout books and equipment with.</p>
+      <p>We developed a student-facing web portal, an administrative management interface, and a Raspberry Pi self-checkout kiosk interface. The platform also integrated Microsoft OAuth single sign-on authentication and a shared-key REST API to securely connect the kiosk system with the backend server.</p>
+      <p>The application was built using Express.js, TypeScript, PostgreSQL, Drizzle ORM, and Docker. Working on CS Library strengthened my experience with full-stack application architecture, REST API development, authentication systems, hardware integration, and collaborative software development.</p>
+      <p>The system is planned to continue being maintained and used by the SCSU Computer Science Department.</p>
     </div>
   </article>
 
@@ -85,9 +89,10 @@
       <p class="project__desc">a zone-aware security system</p>
     </div>
     <div class="project__body">
-      <p>Privacy and security is something I take extremely seriously. It's a fundamental right that we should all have in all scopes, especially home security. The thing is... Solutions for that are expensive, locked behind subscriptions, and are difficult to self-host and maintain.</p>
-      <p>Sentinel is my answer to that. Built with a team member, Sentinel is a low cost and easy to use system that detects people in real time from camera streams and matches detections against user-defined "smart zones" with configurable alert levels.</p>
-      <p>This was built with Python, FastAPI, Google Cloud Vision API, and a Streamlit dashboard with role-based access control and live event logging, all backed by PostgreSQL.</p>
+      <p>Privacy and security are what I take seriously, especially when it comes to home security. The problem is that many existing solutions are expensive, locked behind subscriptions, or difficult to self-host and maintain.</p>
+      <p>Sentinel was built as a solution to provide a more accessible alternative. Developed alongside a team member, Sentinel is a low-cost, zone-aware security system that detects people in real time from live camera streams and matches detections against user-defined smart zones with configurable alert levels.</p>
+      <p>The system was built using Python, FastAPI, PostgreSQL, and a Streamlit dashboard with role-based access control and live event logging. Google Cloud Vision API handles the real-time person detection pipeline, allowing Sentinel to process live camera feeds and generate alerts dynamically.</p>
+      <p>Building Sentinel strengthened my experience with Streamlit, backend APIs, real-time event processing, authentication systems, database integration, and cloud-based computer vision services.</p>
     </div>
   </article>
 
@@ -95,12 +100,12 @@
     <div class="project__media">
       <img src="/img/project3.png" alt="Echo, where you can add your favorite songs to share.">
       <h3 class="project__title"><a href="https://github.com/JoseG320/Echo-php" target="_blank" rel="noopener noreferrer">Echo</a></h3>
-      <p class="project__desc">a music comparator app</p>
+      <p class="project__desc">a social music comparison web app</p>
     </div>
     <div class="project__body">
-      <p>I love music. Music is everything to me. When I connected with a teammate </p>
-      <p>That is how Echo was made and who it was made for. Echo is a social music-library web app where users manage playlists, browse other users' libraries, and compare profiles to find songs in common. It was my first project with a relational database schema, and it includes secure hashed-password authentication and an admin panel.</p>
-      <p>This application was built with PHP, MySQL, Apache, and Docker. I'd love to expand it into a full-fledged application someday. The comparison feature, fostering an online connection using music, has a lot of potential.</p>
+      <p>I love music. Music is one of the best ways people connect with each other. Shared artists, favorite albums, and even playlists can create communities and start conversations. That idea inspired Echo, a collaborative social music-library application created as part of a team project.</p>
+      <p>Echo allows users to manage playlists, browse other users' libraries, and compare profiles to discover songs they have in common. The project introduced me to relational database design and full-stack web development, including secure hashed-password authentication and admin functionality.</p>
+      <p>The application was built using PHP, MySQL, Apache, and Docker. Developing Echo helped strengthen my understanding of database relationships, user authentication systems, and collaborative application design. I hope to continue expanding the platform into a full fledge application in the future.</p>
     </div>
   </article>
   <!--
@@ -133,8 +138,8 @@
     <div>
       <h3 class="contact__lead">Let's work together.</h3>
       <div class="contact__text">
-        <p>I'm always open to work. Whether that's a job, a freelance project, or a collaboration. If you think we'd work well together, I'd love to hear from you. Fill out the form to reach out to me!</p>
-        <p>I'm also free to talk about anything other than opportunities. If you want to talk to me about video games, music, a hobby you are working on, or just want to say hi, reach out!</p>
+        <p>I'm always open to new opportunities, whether that's a full-time role, freelance project, or collaboration. If you think we'd work well together, I'd love to hear from you.</p>
+        <p>I'm also happy to connect outside of work. Whether you want to talk about technology, video games, music, personal projects, or just wanna say hi, feel free to reach out to me!</p>
       </div>
     </div>
     <form class="form" action="/contact" method="post">

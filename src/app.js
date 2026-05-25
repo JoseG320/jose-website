@@ -105,6 +105,12 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use((req, res, next) => {
+  res.locals.siteUrl     = config.siteUrl;
+  res.locals.currentPath = req.path;
+  next();
+});
+
 // PAGE ROUTES
 app.use('/', publicRoutes);
 app.use('/admin', authRoutes); // /admin/login, /admin/logout

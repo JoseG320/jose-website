@@ -30,7 +30,6 @@ async function runMigrations(client) {
     );
 
     if (rows.length > 0) {
-      console.log(`[migrations] already applied: ${name}`);
       continue;
     }
 

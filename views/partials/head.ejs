@@ -4,3 +4,15 @@
 <link rel="stylesheet" href="/css/style.css?v=<%= assetVersion %>" />
 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<!-- OpenGraph -->
+<meta property="og:type"        content="website" />
+<meta property="og:url"         content="<%= siteUrl %><%= currentPath || '' %>" />
+<meta property="og:title"       content="Jose Gaspar Marin" />
+<meta property="og:description" content="Full-stack developer and IT engineer." />
+<meta property="og:image"       content="<%= siteUrl %>/assets/logobigger.png" />
+
+<!-- Twitter/X Card -->
+<meta name="twitter:card"        content="summary_large_image" />
+<meta name="twitter:title"       content="Jose Gaspar Marin" />
+<meta name="twitter:description" content="Full-stack developer and IT engineer." />
+<meta name="twitter:image"       content="<%= siteUrl %>/assets/logobigger.png" />
