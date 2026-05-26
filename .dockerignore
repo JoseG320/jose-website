@@ -6,7 +6,7 @@ npm-debug.log*
 .git
 .gitignore
 uploads
-public/img
+public/img/uploads
 .DS_Store
 Dockerfile
 docker-compose.yml

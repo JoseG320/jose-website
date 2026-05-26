@@ -28,7 +28,7 @@
           <span style="font-weight:600;font-size:.9rem;"><%= p.label %></span>
 
           <% if (settings[p.slot]) { %>
-            <img src="/img/<%= settings[p.slot] %>"
+            <img src="/img/uploads/<%= settings[p.slot] %>"
                  alt="<%= p.label %>"
                  style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:var(--radius);" />
             <form class="photo-delete-form" action="/admin/photo/<%= p.slot %>/delete" method="post">

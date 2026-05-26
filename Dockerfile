@@ -14,7 +14,7 @@ COPY . .
 
 # Create the two upload dirs and hand them to the non-root `node` user
 # so the named volumes inherit writable ownership on first creation.
-RUN mkdir -p /app/uploads /app/public/img \
+RUN mkdir -p /app/uploads /app/public/img/uploads \
   && chown -R node:node /app/uploads /app/public/img
 
 USER node

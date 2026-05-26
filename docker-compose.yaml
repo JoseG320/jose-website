@@ -29,7 +29,7 @@ services:
         condition: service_healthy
     volumes:
       - uploads:/app/uploads
-      - images:/app/public/img
+      - images:/app/public/img/uploads
     ports:
       - "127.0.0.1:3000:3000"   # localhost only — host Nginx proxies to this
 

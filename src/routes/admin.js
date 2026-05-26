@@ -19,6 +19,12 @@ router.use(requirePasswordCurrent);
 // MULTERS
 fs.mkdirSync(config.uploads.dir, { recursive: true });
 
+// Admin-uploaded site photos live in a SUBDIRECTORY of public/img so the
+// Docker volume can mount here without shadowing the static, committed
+// design assets (project1.png, etc.) that sit directly in public/img.
+const IMG_UPLOAD_DIR = path.join(__dirname, '../../public/img/uploads');
+fs.mkdirSync(IMG_UPLOAD_DIR, { recursive: true });
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, config.uploads.dir),
   filename: (req, file, cb) => {
@@ -43,9 +49,8 @@ const upload = multer({
 // IMAGE MULTER
 const imageStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const dir = path.join(__dirname, '../../public/img');
-    fs.mkdirSync(dir, { recursive: true });
-    cb(null, dir);
+    fs.mkdirSync(IMG_UPLOAD_DIR, { recursive: true });
+    cb(null, IMG_UPLOAD_DIR);
   },
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase();
@@ -230,7 +235,7 @@ router.post(
         [req.params.slot]
       );
       if (rows[0] && rows[0].value) {
-        const oldPath = path.join(__dirname, '../../public/img', rows[0].value);
+        const oldPath = path.join(IMG_UPLOAD_DIR, rows[0].value);
         fs.promises.unlink(oldPath).catch(() => {});
       }
 
@@ -256,7 +261,7 @@ router.post('/photo/:slot/delete', verifyToken, async (req, res, next) => {
       [req.params.slot]
     );
     if (rows[0] && rows[0].value) {
-      const filePath = path.join(__dirname, '../../public/img', rows[0].value);
+      const filePath = path.join(IMG_UPLOAD_DIR, rows[0].value);
       fs.promises.unlink(filePath).catch(() => {});
       await pool.query(
         `INSERT INTO site_settings (key, value) VALUES ($1, '')

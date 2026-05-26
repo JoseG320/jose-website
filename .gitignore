@@ -4,5 +4,5 @@ uploads/*
 !uploads/.gitkeep
 npm-debug.log*
 .DS_Store
-public/img/*
-!public/img/.gitkeep
+public/img/uploads/*
+!public/img/uploads/.gitkeep
