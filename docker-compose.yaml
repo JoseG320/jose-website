@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PGUSER:-portfolio}
+      POSTGRES_PASSWORD: ${PGPASSWORD:-portfolio}
+      POSTGRES_DB: ${PGDATABASE:-portfolio}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PGUSER:-portfolio} -d ${PGDATABASE:-portfolio}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    # No host port published — only the app reaches it over the compose network.
+
+  app:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # Reach Postgres by its compose service name, overriding whatever
+      # PGHOST/PGPORT say in .env. config.js assembles DATABASE_URL from these.
+      PGHOST: db
+      PGPORT: 5432
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - uploads:/app/uploads
+      - images:/app/public/img
+    ports:
+      - "127.0.0.1:3000:3000"   # localhost only — host Nginx proxies to this
+
+volumes:
+  pgdata:
+  uploads:
+  images:
